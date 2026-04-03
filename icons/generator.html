@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotovoltaico - Icon Generator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0e1117; color: #e6edf3; padding: 40px; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  p.sub { color: #8b949e; margin-bottom: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 32px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; }
+  .card h2 { font-size: 16px; margin-bottom: 4px; }
+  .card .meta { font-size: 13px; color: #8b949e; margin-bottom: 16px; }
+  .card .preview { display: flex; justify-content: center; align-items: center; margin-bottom: 16px; background: #0d1117; border-radius: 8px; padding: 20px; min-height: 200px; }
+  .card canvas { max-width: 100%; height: auto; border-radius: 4px; }
+  .card button { background: #238636; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; cursor: pointer; width: 100%; }
+  .card button:hover { background: #2ea043; }
+</style>
+</head>
+<body>
+
+<h1>Fotovoltaico — Icon Generator</h1>
+<p class="sub">Genera e scarica le icone PNG per la skill Alexa e il widget</p>
+
+<div class="grid">
+  <div class="card">
+    <h2>Skill Icon (Small)</h2>
+    <div class="meta">108 × 108 px — smallIconUri</div>
+    <div class="preview"><canvas id="c-skill-small"></canvas></div>
+    <button onclick="download('c-skill-small','skill-icon-108x108.png')">Scarica PNG</button>
+  </div>
+  <div class="card">
+    <h2>Skill Icon (Large)</h2>
+    <div class="meta">512 × 512 px — largeIconUri</div>
+    <div class="preview"><canvas id="c-skill-large"></canvas></div>
+    <button onclick="download('c-skill-large','skill-icon-512x512.png')">Scarica PNG</button>
+  </div>
+  <div class="card">
+    <h2>Widget Icon</h2>
+    <div class="meta">450 × 450 px — iconUri</div>
+    <div class="preview"><canvas id="c-widget-icon"></canvas></div>
+    <button onclick="download('c-widget-icon','widget-icon-450x450.png')">Scarica PNG</button>
+  </div>
+  <div class="card">
+    <h2>Widget Preview</h2>
+    <div class="meta">328 × 552 px — previews[]</div>
+    <div class="preview"><canvas id="c-widget-preview"></canvas></div>
+    <button onclick="download('c-widget-preview','widget-preview-328x552.png')">Scarica PNG</button>
+  </div>
+</div>
+
+<script>
+function drawSkillIcon(canvasId, size) {
+  const c = document.getElementById(canvasId);
+  c.width = size;
+  c.height = size;
+  const ctx = c.getContext('2d');
+  const s = size / 512;
+
+  const grad = ctx.createLinearGradient(0, size, size, 0);
+  grad.addColorStop(0, '#1B3A4B');
+  grad.addColorStop(1, '#4A90B8');
+
+  const r = 80 * s;
+  roundRect(ctx, 0, 0, size, size, r);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  drawSun(ctx, size * 0.5, size * 0.32, size * 0.18, s);
+  drawPanelIcon(ctx, size * 0.5, size * 0.62, size * 0.22, s);
+
+  ctx.font = `${Math.round(700)}, ${Math.round(44 * s)}px -apple-system, sans-serif`;
+  ctx.font = `700 ${Math.round(44 * s)}px -apple-system, sans-serif`;
+  ctx.fillStyle = '#FAFAFA';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('PV', size * 0.5, size * 0.9);
+}
+
+function drawWidgetIcon(canvasId, size) {
+  const c = document.getElementById(canvasId);
+  c.width = size;
+  c.height = size;
+  const ctx = c.getContext('2d');
+  const s = size / 512;
+
+  const grad = ctx.createLinearGradient(0, size, size, 0);
+  grad.addColorStop(0, '#1B3A4B');
+  grad.addColorStop(1, '#4A90B8');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+
+  drawSun(ctx, size * 0.5, size * 0.32, size * 0.19, s);
+  drawPanelIcon(ctx, size * 0.5, size * 0.64, size * 0.24, s);
+
+  ctx.font = `700 ${Math.round(40 * s)}px -apple-system, sans-serif`;
+  ctx.fillStyle = '#FAFAFA';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('PV', size * 0.5, size * 0.91);
+}
+
+function drawWidgetPreview(canvasId) {
+  const w = 328, h = 552;
+  const c = document.getElementById(canvasId);
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext('2d');
+
+  const grad = ctx.createLinearGradient(0, 0, w * 0.3, h);
+  grad.addColorStop(0, '#1B3A4B');
+  grad.addColorStop(1, '#4A90B8');
+  roundRect(ctx, 0, 0, w, h, 16);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  const pad = 24;
+
+  ctx.font = '700 22px -apple-system, sans-serif';
+  ctx.fillStyle = '#FAFAFA';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText('☀️ Fotovoltaico', pad, pad);
+
+  ctx.font = '600 12px -apple-system, sans-serif';
+  ctx.fillStyle = '#B0BEC5';
+  ctx.fillText('POTENZA ATTUALE', pad, 100);
+
+  ctx.font = '800 54px -apple-system, sans-serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText('3.42', pad, 122);
+
+  ctx.font = '400 20px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillText('kW', pad + ctx.measureText('3.42').width + 8, 148);
+
+  ctx.save();
+  ctx.font = '800 54px -apple-system, sans-serif';
+  ctx.restore();
+
+  const cardY = 220;
+  const cardH = 90;
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  roundRect(ctx, pad, cardY, w - pad * 2, cardH, 8);
+  ctx.fill();
+
+  ctx.font = '500 13px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.65)';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⚡ Oggi', pad + 14, cardY + 28);
+
+  ctx.font = '700 15px -apple-system, sans-serif';
+  ctx.fillStyle = '#81C784';
+  ctx.textAlign = 'right';
+  ctx.fillText('8.94 kWh', w - pad - 14, cardY + 28);
+
+  ctx.textAlign = 'left';
+  ctx.font = '500 13px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.65)';
+  ctx.fillText('📅 Mese', pad + 14, cardY + 62);
+
+  ctx.font = '700 15px -apple-system, sans-serif';
+  ctx.fillStyle = '#64B5F6';
+  ctx.textAlign = 'right';
+  ctx.fillText('156.3 kWh', w - pad - 14, cardY + 62);
+
+  ctx.textAlign = 'right';
+  ctx.font = '400 10px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillText('Agg. 14:30', w - pad, cardY + cardH + 16);
+}
+
+function drawSun(ctx, cx, cy, radius, s) {
+  ctx.save();
+
+  const sunGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+  sunGrad.addColorStop(0, '#FFD54F');
+  sunGrad.addColorStop(1, '#FFA726');
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.52, 0, Math.PI * 2);
+  ctx.fillStyle = sunGrad;
+  ctx.fill();
+
+  ctx.strokeStyle = '#FFD54F';
+  ctx.lineWidth = Math.max(3 * s, 1.5);
+  ctx.lineCap = 'round';
+  const rays = 8;
+  const innerR = radius * 0.65;
+  const outerR = radius;
+  for (let i = 0; i < rays; i++) {
+    const angle = (Math.PI * 2 * i) / rays - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle) * innerR, cy + Math.sin(angle) * innerR);
+    ctx.lineTo(cx + Math.cos(angle) * outerR, cy + Math.sin(angle) * outerR);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawPanelIcon(ctx, cx, cy, panelSize, s) {
+  ctx.save();
+
+  const pw = panelSize * 1.6;
+  const ph = panelSize * 1.1;
+  const px = cx - pw / 2;
+  const py = cy - ph / 2;
+
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  roundRect(ctx, px, py, pw, ph, 6 * s);
+  ctx.fill();
+
+  ctx.fillStyle = '#1565C0';
+  roundRect(ctx, px + 3 * s, py + 3 * s, pw - 6 * s, ph - 6 * s, 4 * s);
+  ctx.fill();
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+  ctx.lineWidth = Math.max(1.5 * s, 0.8);
+
+  const cols = 3;
+  const rows = 2;
+  const cellW = (pw - 6 * s) / cols;
+  const cellH = (ph - 6 * s) / rows;
+
+  for (let i = 1; i < cols; i++) {
+    const lx = px + 3 * s + i * cellW;
+    ctx.beginPath();
+    ctx.moveTo(lx, py + 3 * s);
+    ctx.lineTo(lx, py + ph - 3 * s);
+    ctx.stroke();
+  }
+  for (let i = 1; i < rows; i++) {
+    const ly = py + 3 * s + i * cellH;
+    ctx.beginPath();
+    ctx.moveTo(px + 3 * s, ly);
+    ctx.lineTo(px + pw - 3 * s, ly);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#FFD54F';
+  const boltH = panelSize * 0.35;
+  const boltW = boltH * 0.45;
+  const bx = cx;
+  const by = py + ph + 8 * s;
+  ctx.beginPath();
+  ctx.moveTo(bx - boltW * 0.1, by);
+  ctx.lineTo(bx + boltW * 0.5, by);
+  ctx.lineTo(bx + boltW * 0.1, by + boltH * 0.45);
+  ctx.lineTo(bx + boltW * 0.55, by + boltH * 0.45);
+  ctx.lineTo(bx - boltW * 0.15, by + boltH);
+  ctx.lineTo(bx + boltW * 0.15, by + boltH * 0.55);
+  ctx.lineTo(bx - boltW * 0.35, by + boltH * 0.55);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function download(canvasId, filename) {
+  const c = document.getElementById(canvasId);
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = c.toDataURL('image/png');
+  link.click();
+}
+
+drawSkillIcon('c-skill-small', 108);
+drawSkillIcon('c-skill-large', 512);
+drawWidgetIcon('c-widget-icon', 450);
+drawWidgetPreview('c-widget-preview');
+</script>
+
+</body>
+</html>

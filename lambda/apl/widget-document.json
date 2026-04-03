@@ -1,0 +1,222 @@
+{
+  "type": "APL",
+  "version": "2024.3",
+  "extensions": [
+    {
+      "name": "DataStore",
+      "uri": "alexaext:datastore:10"
+    }
+  ],
+  "settings": {
+    "DataStore": {
+      "dataBindings": [
+        {
+          "namespace": "fotovoltaico",
+          "key": "realtime",
+          "dataBindingName": "solarData",
+          "dataType": "object"
+        }
+      ]
+    }
+  },
+  "mainTemplate": {
+    "parameters": [
+      "solarDefaults"
+    ],
+    "items": {
+      "type": "Container",
+      "width": "100vw",
+      "height": "100vh",
+      "items": [
+        {
+          "type": "Frame",
+          "width": "100vw",
+          "height": "100vh",
+          "borderRadius": "4dp",
+          "background": {
+            "type": "linear",
+            "colorRange": ["#1B3A4B", "#4A90B8"],
+            "inputRange": [0, 1],
+            "angle": 160
+          },
+          "item": {
+            "type": "Container",
+            "width": "100%",
+            "height": "100%",
+            "paddingTop": "24dp",
+            "paddingBottom": "20dp",
+            "paddingLeft": "24dp",
+            "paddingRight": "24dp",
+            "justifyContent": "spaceBetween",
+            "items": [
+              {
+                "type": "Container",
+                "direction": "row",
+                "alignItems": "center",
+                "spacing": "10dp",
+                "items": [
+                  {
+                    "type": "Image",
+                    "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-power.png",
+                    "width": "28dp",
+                    "height": "28dp",
+                    "borderRadius": "14dp"
+                  },
+                  {
+                    "type": "Text",
+                    "text": "Fotovoltaico",
+                    "fontSize": "22dp",
+                    "fontWeight": "700",
+                    "color": "#FAFAFA"
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "grow": 1,
+                "justifyContent": "center",
+                "items": [
+                  {
+                    "type": "Text",
+                    "text": "POTENZA ATTUALE",
+                    "fontSize": "12dp",
+                    "fontWeight": "600",
+                    "color": "#B0BEC5",
+                    "letterSpacing": "1dp"
+                  },
+                  {
+                    "type": "Container",
+                    "direction": "row",
+                    "alignItems": "baseline",
+                    "spacing": "6dp",
+                    "paddingTop": "4dp",
+                    "items": [
+                      {
+                        "type": "Text",
+                        "text": "${solarData.realTimePower ? solarData.realTimePower : solarDefaults.realTimePower}",
+                        "fontSize": "46dp",
+                        "fontWeight": "800",
+                        "color": "#FFFFFF"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "kW",
+                        "fontSize": "18dp",
+                        "fontWeight": "400",
+                        "color": "rgba(255,255,255,0.55)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "spacing": "6dp",
+                "items": [
+                  {
+                    "type": "Frame",
+                    "width": "100%",
+                    "borderRadius": "8dp",
+                    "backgroundColor": "rgba(0,0,0,0.18)",
+                    "paddingTop": "12dp",
+                    "paddingBottom": "12dp",
+                    "paddingLeft": "14dp",
+                    "paddingRight": "14dp",
+                    "item": {
+                      "type": "Container",
+                      "spacing": "10dp",
+                      "items": [
+                        {
+                          "type": "Container",
+                          "direction": "row",
+                          "alignItems": "center",
+                          "justifyContent": "spaceBetween",
+                          "items": [
+                            {
+                              "type": "Container",
+                              "direction": "row",
+                              "alignItems": "center",
+                              "spacing": "8dp",
+                              "items": [
+                                {
+                                  "type": "Image",
+                                  "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-today.png",
+                                  "width": "20dp",
+                                  "height": "20dp",
+                                  "borderRadius": "10dp"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "Oggi",
+                                  "fontSize": "13dp",
+                                  "fontWeight": "500",
+                                  "color": "rgba(255,255,255,0.65)"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "Text",
+                              "text": "${solarData.dailyEnergy ? solarData.dailyEnergy : solarDefaults.dailyEnergy} kWh",
+                              "fontSize": "15dp",
+                              "fontWeight": "700",
+                              "color": "#81C784"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Container",
+                          "direction": "row",
+                          "alignItems": "center",
+                          "justifyContent": "spaceBetween",
+                          "items": [
+                            {
+                              "type": "Container",
+                              "direction": "row",
+                              "alignItems": "center",
+                              "spacing": "8dp",
+                              "items": [
+                                {
+                                  "type": "Image",
+                                  "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-month.png",
+                                  "width": "20dp",
+                                  "height": "20dp",
+                                  "borderRadius": "10dp"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "Mese",
+                                  "fontSize": "13dp",
+                                  "fontWeight": "500",
+                                  "color": "rgba(255,255,255,0.65)"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "Text",
+                              "text": "${solarData.monthEnergy ? solarData.monthEnergy : solarDefaults.monthEnergy} kWh",
+                              "fontSize": "15dp",
+                              "fontWeight": "700",
+                              "color": "#64B5F6"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "text": "Agg. ${solarData.lastUpdated ? solarData.lastUpdated : solarDefaults.lastUpdated}",
+                    "fontSize": "10dp",
+                    "fontWeight": "400",
+                    "color": "rgba(255,255,255,0.3)",
+                    "textAlign": "right"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

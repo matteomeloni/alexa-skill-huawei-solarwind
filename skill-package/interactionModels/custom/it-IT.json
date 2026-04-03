@@ -1,0 +1,70 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "fotovoltaico",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "PotenzaAttualeIntent",
+          "slots": [],
+          "samples": [
+            "quanto sta producendo",
+            "potenza attuale",
+            "quanta potenza",
+            "produzione attuale",
+            "quanto produce adesso",
+            "quanto produce",
+            "quanta energia sta producendo",
+            "dimmi la potenza",
+            "qual è la potenza attuale",
+            "com'è la produzione",
+            "a quanto sta",
+            "cosa sta producendo",
+            "produzione in tempo reale",
+            "quanto genera",
+            "sta producendo"
+          ]
+        },
+        {
+          "name": "ProduzioneOggiIntent",
+          "slots": [],
+          "samples": [
+            "quanta energia ha prodotto oggi",
+            "produzione di oggi",
+            "energia prodotta oggi",
+            "quanto ha prodotto oggi",
+            "produzione giornaliera",
+            "quanta energia oggi",
+            "quanto ha generato oggi",
+            "dimmi la produzione di oggi",
+            "qual è la produzione di oggi",
+            "energia di oggi",
+            "com'è andata oggi",
+            "quanto ha fatto oggi",
+            "risultato di oggi"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}

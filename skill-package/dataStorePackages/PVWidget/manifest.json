@@ -1,0 +1,41 @@
+{
+  "packageVersion": "1.0",
+  "packageType": "APL_PACKAGE",
+  "publishingInformation": {
+    "schemaVersion": "1.0",
+    "locales": {
+      "it-IT": [
+        {
+          "targetViewport": "WIDGET_M",
+          "metadata": {
+            "name": "Fotovoltaico",
+            "description": "Monitora la produzione del tuo impianto fotovoltaico Huawei FusionSolar in tempo reale",
+            "keywords": [
+              "fotovoltaico",
+              "solare",
+              "energia",
+              "produzione",
+              "huawei"
+            ],
+            "iconUri": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/widget-icon-450.png",
+            "previews": [
+              "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/widget-preview-328x552.png"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "id": "PVWidget",
+    "version": "1.0.0",
+    "installStateChanges": "INFORM",
+    "updateStateChanges": "INFORM",
+    "appliesTo": "${viewport.mode == 'HUB'}",
+    "presentationDefinitions": [
+      {
+        "url": "presentations/default.tpl"
+      }
+    ]
+  }
+}

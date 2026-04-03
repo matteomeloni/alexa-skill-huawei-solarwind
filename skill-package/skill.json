@@ -1,0 +1,91 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:eu-west-1:126437948323:function:alexa-fotovoltaico"
+        },
+        "interfaces": [
+          {
+            "type": "ALEXA_PRESENTATION_APL",
+            "supportedViewports": [
+              {
+                "mode": "HUB",
+                "shape": "RECTANGLE",
+                "minWidth": 480,
+                "maxWidth": 1920,
+                "minHeight": 320,
+                "maxHeight": 1200
+              },
+              {
+                "mode": "HUB",
+                "shape": "ROUND",
+                "minWidth": 100,
+                "maxWidth": 600,
+                "minHeight": 100,
+                "maxHeight": 600
+              }
+            ]
+          },
+          {
+            "type": "ALEXA_DATA_STORE"
+          },
+          {
+            "type": "ALEXA_DATASTORE_PACKAGEMANAGER",
+            "packages": [
+              {
+                "id": "PVWidget"
+              }
+            ]
+          },
+          {
+            "type": "ALEXA_EXTENSION",
+            "requestedExtensions": [
+              {
+                "uri": "alexaext:datastore:10"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "locales": {
+        "it-IT": {
+          "name": "Fotovoltaico",
+          "smallIconUri": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/skill-icon-108.png",
+          "largeIconUri": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/skill-icon-512.png",
+          "summary": "Controlla la produzione del tuo impianto fotovoltaico Huawei FusionSolar",
+          "description": "Questa skill ti permette di conoscere la potenza in tempo reale e la produzione giornaliera del tuo impianto fotovoltaico Huawei, tramite il portale FusionSolar. Puoi anche aggiungere un widget alla home screen del tuo Echo Show o Echo Hub per avere i dati sempre visibili.",
+          "examplePhrases": [
+            "Alexa, apri fotovoltaico",
+            "quanto sta producendo",
+            "quanta energia ha prodotto oggi"
+          ],
+          "keywords": [
+            "fotovoltaico",
+            "solare",
+            "energia",
+            "huawei",
+            "fusionsolar",
+            "produzione"
+          ]
+        }
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "Skill privata per monitoraggio impianto fotovoltaico personale.",
+      "category": "SMART_HOME",
+      "distributionCountries": [
+        "IT"
+      ]
+    },
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false
+    }
+  }
+}
