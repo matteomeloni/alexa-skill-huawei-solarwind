@@ -18,18 +18,30 @@ EnergyFlowV2/
     interactionModels/custom/
       it-IT.json                      # Interaction model in italiano
     dataStorePackages/
-      FotovoltaicoWidget/             # APL package per il widget
+      PVWidget/                       # APL package per il widget
         manifest.json                 # Package manifest
         documents/document.json       # Documento APL del widget
-        datasources/default.json      # Datasource (vuoto, usa DataStore)
+        datasources/default.json      # Datasource defaults
         presentations/default.tpl     # Presentation definition
   lambda/
-    index.js                          # Handler Alexa (vocali + widget lifecycle)
-    util.js                           # API FusionSolar + DataStore helper
+    index.js                          # Router: EventBridge vs Alexa SDK
+    util.js                           # API FusionSolar + LWA token + DataStore
+    helpers.js                        # APL directive, safeNumber, supportsAPL
+    messages.js                       # Stringhe vocali SSML in italiano
+    handlers/
+      solar.js                        # Launch, PotenzaAttuale, ProduzioneOggi
+      widget.js                       # UsagesInstalled, UpdateRequest, UsagesRemoved
+      builtin.js                      # Help, Cancel/Stop, Fallback, SessionEnded, Error
     package.json                      # Dipendenze Node.js
     apl/
-      widget-document.json            # Copia del documento APL widget
       launch-document.json            # Documento APL per risposta su schermo
+      widget-document.json            # Documento APL widget (referenza)
+    __tests__/                        # Test con node:test (built-in)
+      helpers.test.js
+      util.test.js
+      handlers.test.js
+  icons/
+    output/                           # Icone generate (caricate su S3)
   ask-resources.json                  # Configurazione ASK CLI
 ```
 
@@ -42,11 +54,31 @@ EnergyFlowV2/
 | IAM Role | `alexa-fotovoltaico-lambda-role` |
 | Region | `eu-west-1` (Irlanda) |
 
+## Variabili d'ambiente Lambda
+
+| Variabile | Descrizione |
+|-----------|-------------|
+| `KIOSK_TOKEN` | Token per l'endpoint kiosk di FusionSolar |
+| `SKILL_CLIENT_ID` | Client ID per Login with Amazon (OAuth client_credentials) |
+| `SKILL_CLIENT_SECRET` | Client Secret per Login with Amazon |
+| `ALEXA_USER_ID` | User ID Alexa per aggiornamento schedulato del widget (opzionale) |
+
+Le client credentials si ottengono dalla [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask) > la skill > Permissions > tab Skills > Edit.
+
+Per aggiornare le variabili:
+
+```bash
+aws lambda update-function-configuration \
+  --function-name alexa-fotovoltaico \
+  --environment "Variables={KIOSK_TOKEN=...,SKILL_CLIENT_ID=...,SKILL_CLIENT_SECRET=...,ALEXA_USER_ID=...}" \
+  --region eu-west-1
+```
+
 ## Aggiornare il codice Lambda
 
 ```bash
 cd lambda
-zip -r ../lambda-deploy.zip . -x "*.DS_Store"
+zip -r ../lambda-deploy.zip . -x "*.DS_Store" -x "__tests__/*"
 aws lambda update-function-code \
   --function-name alexa-fotovoltaico \
   --zip-file fileb://../lambda-deploy.zip \
@@ -71,16 +103,21 @@ ask smapi set-interaction-model \
   --interaction-model "$(cat skill-package/interactionModels/custom/it-IT.json)"
 ```
 
-## Testing
+## Test
 
 ```bash
-# Simulare "apri fotovoltaico"
+cd lambda
+npm test
+```
+
+### Simulazione skill
+
+```bash
 ask smapi simulate-skill \
   -s amzn1.ask.skill.f6aadf83-0f5d-43ff-875c-d77673d8b9db \
   --device-locale it-IT \
   --input-content "apri fotovoltaico"
 
-# Recuperare il risultato
 ask smapi get-skill-simulation \
   -s amzn1.ask.skill.f6aadf83-0f5d-43ff-875c-d77673d8b9db \
   --simulation-id <ID>
@@ -88,7 +125,7 @@ ask smapi get-skill-simulation \
 
 ## Widget
 
-Il widget e' incluso nello skill package in `skill-package/dataStorePackages/FotovoltaicoWidget/`.
+Il widget e' incluso nello skill package in `skill-package/dataStorePackages/PVWidget/`.
 Viene deployato automaticamente con `ask deploy --target skill-metadata`.
 
 Per visualizzarlo/modificarlo nella Developer Console:
@@ -105,21 +142,6 @@ Per testare il widget serve un Echo Hub/Show reale (non supportato nel simulator
 ask deploy --target skill-metadata
 ```
 
-## Variabili d'ambiente Lambda
-
-| Variabile | Descrizione |
-|-----------|-------------|
-| `KIOSK_TOKEN` | Token per l'endpoint kiosk di FusionSolar |
-
-Per aggiornare il token:
-
-```bash
-aws lambda update-function-configuration \
-  --function-name alexa-fotovoltaico \
-  --environment "Variables={KIOSK_TOKEN=<nuovo-token>}" \
-  --region eu-west-1
-```
-
 ## API FusionSolar
 
 La skill usa l'endpoint kiosk pubblico:
@@ -131,3 +153,4 @@ GET https://uni005eu5.fusionsolar.huawei.com/rest/pvms/web/kiosk/v1/station-kios
 Dati estratti:
 - `realKpi.realTimePower` -- potenza istantanea (kW)
 - `realKpi.dailyEnergy` -- energia prodotta oggi (kWh)
+- `realKpi.monthEnergy` -- energia prodotta nel mese (kWh)
