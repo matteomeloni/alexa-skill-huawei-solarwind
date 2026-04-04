@@ -6,6 +6,7 @@ const MOCK_SOLAR_DATA = {
   dailyEnergy: '8.5',
   monthEnergy: '150',
   lastUpdated: '14:30',
+  chartData: null,
 };
 
 function createMockHandlerInput(requestType, intentName, opts = {}) {

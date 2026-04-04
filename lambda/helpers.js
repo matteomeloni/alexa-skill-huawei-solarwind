@@ -7,18 +7,22 @@ function supportsAPL(handlerInput) {
 
 function addAplDirective(responseBuilder, handlerInput, solarData) {
   if (!supportsAPL(handlerInput)) return;
+
+  const datasources = {
+    solarData: {
+      realTimePower: solarData.realTimePower,
+      dailyEnergy: solarData.dailyEnergy,
+      monthEnergy: solarData.monthEnergy,
+      lastUpdated: solarData.lastUpdated,
+    },
+    chartData: solarData.chartData || {},
+  };
+
   responseBuilder.addDirective({
     type: 'Alexa.Presentation.APL.RenderDocument',
     token: 'launchToken',
     document: launchDocument,
-    datasources: {
-      solarData: {
-        realTimePower: solarData.realTimePower,
-        dailyEnergy: solarData.dailyEnergy,
-        monthEnergy: solarData.monthEnergy,
-        lastUpdated: solarData.lastUpdated,
-      },
-    },
+    datasources,
   });
 }
 

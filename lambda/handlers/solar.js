@@ -35,7 +35,7 @@ const LaunchRequestHandler = {
     } catch (err) {
       console.error('LaunchRequest error:', err.message);
       speechText = msg.WELCOME_FALLBACK;
-      solarData = { realTimePower: '--', dailyEnergy: '--', monthEnergy: '--', lastUpdated: '--' };
+      solarData = { realTimePower: '--', dailyEnergy: '--', monthEnergy: '--', lastUpdated: '--', chartData: null };
     }
 
     const responseBuilder = handlerInput.responseBuilder

@@ -53,6 +53,17 @@ function safeJsonParse(str) {
 }
 
 function extractRealKpi(raw) {
+  const payload = decodeKioskPayload(raw);
+  return payload?.realKpi || null;
+}
+
+function validateSolarValue(value, max) {
+  const num = parseFloat(value);
+  if (isNaN(num) || num < 0 || num > max) return '0';
+  return String(num);
+}
+
+function decodeKioskPayload(raw) {
   let parsed;
 
   if (typeof raw === 'string') {
@@ -75,13 +86,85 @@ function extractRealKpi(raw) {
     ? (typeof parsed.data === 'string' ? safeJsonParse(parsed.data) : parsed.data)
     : parsed;
 
-  return inner?.realKpi || null;
+  return inner || null;
 }
 
-function validateSolarValue(value, max) {
-  const num = parseFloat(value);
-  if (isNaN(num) || num < 0 || num > max) return '0';
-  return String(num);
+function extractPowerCurve(raw) {
+  const payload = decodeKioskPayload(raw);
+  if (!payload?.powerCurve) return null;
+
+  const { xAxis, activePower } = payload.powerCurve;
+  if (!Array.isArray(xAxis) || !Array.isArray(activePower)) return null;
+
+  const points = [];
+  for (let i = 0; i < xAxis.length; i++) {
+    const val = parseFloat(activePower[i]);
+    if (!isNaN(val) && activePower[i] !== '-') {
+      points.push({ time: xAxis[i], power: val });
+    }
+  }
+  return points.length > 0 ? points : null;
+}
+
+function timeToMinutes(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+const CHART_START = 8 * 60;
+const CHART_END = 20 * 60;
+
+function buildChartPath(points, width, height) {
+  if (!points || points.length === 0) return null;
+
+  const filtered = points.filter(p => {
+    const m = timeToMinutes(p.time);
+    return m >= CHART_START && m <= CHART_END;
+  });
+
+  const yMax = Math.max(...filtered.map(p => p.power));
+  if (yMax <= 0) return null;
+
+  const yScale = Math.ceil(yMax * 2) / 2;
+  const totalMinutes = CHART_END - CHART_START;
+
+  const coords = filtered.map(p => ({
+    x: Math.round(((timeToMinutes(p.time) - CHART_START) / totalMinutes) * width * 100) / 100,
+    y: Math.round((1 - p.power / yScale) * height * 100) / 100,
+  }));
+
+  if (coords.length === 0) return null;
+
+  const linePath = coords.map((c, i) =>
+    `${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`
+  ).join(' ');
+
+  const areaPath = `${linePath} L ${coords[coords.length - 1].x} ${height} L ${coords[0].x} ${height} Z`;
+
+  const xLabels = [];
+  for (let h = 8; h <= 20; h += 2) {
+    const label = `${String(h).padStart(2, '0')}:00`;
+    const x = Math.round(((h * 60 - CHART_START) / totalMinutes) * width * 100) / 100;
+    xLabels.push({ text: label, x });
+  }
+
+  const yLabels = [];
+  const yStep = yScale <= 2 ? 0.5 : yScale <= 5 ? 1 : 2;
+  for (let v = yScale; v >= 0; v -= yStep) {
+    const y = Math.round((1 - v / yScale) * height * 100) / 100;
+    yLabels.push({ text: String(v), y });
+  }
+
+  let peakPower = 0;
+  let peakTime = '';
+  for (const p of filtered) {
+    if (p.power > peakPower) {
+      peakPower = p.power;
+      peakTime = p.time;
+    }
+  }
+
+  return { areaPath, linePath, xLabels, yLabels, yScale, peakPower, peakTime, width, height };
 }
 
 async function fetchSolarData() {
@@ -111,11 +194,15 @@ async function fetchSolarData() {
     minute: '2-digit',
   });
 
+  const powerCurve = extractPowerCurve(response.data);
+  const chartData = buildChartPath(powerCurve, 400, 120);
+
   return {
     realTimePower: validateSolarValue(realKpi.realTimePower, 100),
     dailyEnergy: validateSolarValue(realKpi.dailyEnergy, 500),
     monthEnergy: validateSolarValue(realKpi.monthEnergy, 15000),
     lastUpdated: timeStr,
+    chartData,
   };
 }
 
@@ -133,6 +220,12 @@ async function updateWidgetDataStore(userId, solarData, _retried = false) {
           dailyEnergy: solarData.dailyEnergy,
           monthEnergy: solarData.monthEnergy,
           lastUpdated: solarData.lastUpdated,
+          chartData: solarData.chartData ? {
+            areaPath: solarData.chartData.areaPath,
+            linePath: solarData.chartData.linePath,
+            xLabels: solarData.chartData.xLabels,
+            yLabels: solarData.chartData.yLabels,
+          } : null,
         },
       },
     ],
@@ -166,5 +259,5 @@ async function updateWidgetDataStore(userId, solarData, _retried = false) {
 module.exports = {
   fetchSolarData,
   updateWidgetDataStore,
-  _testExports: { extractRealKpi, validateSolarValue, safeJsonParse, invalidateLwaToken },
+  _testExports: { extractRealKpi, validateSolarValue, safeJsonParse, invalidateLwaToken, extractPowerCurve, buildChartPath },
 };

@@ -27,10 +27,10 @@
     }
   },
   "manifest": {
-    "id": "PVWidget",
+    "id": "PVChartWidget",
     "version": "1.0.0",
     "installStateChanges": "INFORM",
-    "updateStateChanges": "INFORM",
+    "updateStateChanges": "AUTOMATIC",
     "appliesTo": "${viewport.mode == 'HUB'}",
     "presentationDefinitions": [
       {

@@ -73,8 +73,6 @@
               },
               {
                 "type": "Container",
-                "grow": 1,
-                "justifyContent": "center",
                 "items": [
                   {
                     "type": "Text",
@@ -94,16 +92,56 @@
                       {
                         "type": "Text",
                         "text": "${solarData.realTimePower ? solarData.realTimePower : solarDefaults.realTimePower}",
-                        "fontSize": "46dp",
+                        "fontSize": "42dp",
                         "fontWeight": "800",
                         "color": "#FFFFFF"
                       },
                       {
                         "type": "Text",
                         "text": "kW",
-                        "fontSize": "18dp",
+                        "fontSize": "16dp",
                         "fontWeight": "400",
                         "color": "rgba(255,255,255,0.55)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "when": "${solarData.chartData.areaPath}",
+                "width": "100%",
+                "items": [
+                  {
+                    "type": "Container",
+                    "direction": "row",
+                    "width": "100%",
+                    "items": [
+                      {
+                        "type": "Container",
+                        "width": "22dp",
+                        "height": "60dp",
+                        "justifyContent": "spaceBetween",
+                        "paddingRight": "3dp",
+                        "data": "${solarData.chartData.yLabels}",
+                        "items": [
+                          {
+                            "type": "Text",
+                            "text": "${data.text}",
+                            "fontSize": "8dp",
+                            "fontWeight": "400",
+                            "color": "rgba(255,255,255,0.3)",
+                            "textAlign": "right"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "VectorGraphic",
+                        "grow": 1,
+                        "height": "60dp",
+                        "source": "miniCurveGraphic",
+                        "areaPath": "${solarData.chartData.areaPath}",
+                        "linePath": "${solarData.chartData.linePath}"
                       }
                     ]
                   }
@@ -215,6 +253,33 @@
               }
             ]
           }
+        }
+      ]
+    }
+  },
+  "graphics": {
+    "miniCurveGraphic": {
+      "type": "AVG",
+      "version": "1.2",
+      "parameters": [
+        "areaPath",
+        "linePath"
+      ],
+      "width": 400,
+      "height": 120,
+      "items": [
+        {
+          "type": "path",
+          "pathData": "${areaPath}",
+          "fill": "rgba(129,199,132,0.2)",
+          "stroke": "none"
+        },
+        {
+          "type": "path",
+          "pathData": "${linePath}",
+          "fill": "none",
+          "stroke": "rgba(129,199,132,0.7)",
+          "strokeWidth": 1
         }
       ]
     }

@@ -45,10 +45,19 @@ EnergyFlowV2/
   ask-resources.json                  # Configurazione ASK CLI
 ```
 
-## Risorse AWS
+## Configurazione AWS
+
+Tutti i comandi AWS usano il profilo `personale`:
+
+```bash
+aws configure list --profile personale
+```
 
 | Risorsa | Dettaglio |
 |---------|-----------|
+| AWS Profile | `personale` |
+| Account | `126437948323` |
+| IAM User | `matteo.meloni` |
 | Skill ID | `amzn1.ask.skill.f6aadf83-0f5d-43ff-875c-d77673d8b9db` |
 | Lambda ARN | `arn:aws:lambda:eu-west-1:126437948323:function:alexa-fotovoltaico` |
 | IAM Role | `alexa-fotovoltaico-lambda-role` |
@@ -71,7 +80,8 @@ Per aggiornare le variabili:
 aws lambda update-function-configuration \
   --function-name alexa-fotovoltaico \
   --environment "Variables={KIOSK_TOKEN=...,SKILL_CLIENT_ID=...,SKILL_CLIENT_SECRET=...,ALEXA_USER_ID=...}" \
-  --region eu-west-1
+  --region eu-west-1 \
+  --profile personale
 ```
 
 ## Aggiornare il codice Lambda
@@ -82,7 +92,8 @@ zip -r ../lambda-deploy.zip . -x "*.DS_Store" -x "__tests__/*"
 aws lambda update-function-code \
   --function-name alexa-fotovoltaico \
   --zip-file fileb://../lambda-deploy.zip \
-  --region eu-west-1
+  --region eu-west-1 \
+  --profile personale
 rm ../lambda-deploy.zip
 ```
 
@@ -140,6 +151,34 @@ Per testare il widget serve un Echo Hub/Show reale (non supportato nel simulator
 
 ```bash
 ask deploy --target skill-metadata
+```
+
+## Comandi utili
+
+```bash
+# Verificare profilo e identità AWS
+aws sts get-caller-identity --profile personale
+
+# Leggere variabili d'ambiente correnti
+aws lambda get-function-configuration \
+  --function-name alexa-fotovoltaico \
+  --region eu-west-1 \
+  --profile personale \
+  --query 'Environment.Variables'
+
+# Leggere ultimi log di invocazione
+aws logs tail /aws/lambda/alexa-fotovoltaico \
+  --region eu-west-1 \
+  --profile personale \
+  --since 1h
+
+# Invocare la Lambda manualmente (test schedulato)
+aws lambda invoke \
+  --function-name alexa-fotovoltaico \
+  --payload '{"source":"aws.events","detail-type":"Scheduled Event"}' \
+  --region eu-west-1 \
+  --profile personale \
+  /dev/stdout
 ```
 
 ## API FusionSolar

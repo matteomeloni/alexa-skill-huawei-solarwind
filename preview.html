@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Fotovoltaico - Echo Show Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 40px; font-family: system-ui, -apple-system, sans-serif; }
+  h2 { color: #aaa; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .echo-show {
+    width: 1024px; height: 600px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .screen {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #25485E, #5D9FD3);
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 80px;
+  }
+
+  .header { display: flex; align-items: center; gap: 10px; }
+  .header .icon { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .header .title { font-size: 30px; font-weight: 700; color: #fafafa; }
+
+  .power-section {}
+  .power-label { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; }
+  .power-row { display: flex; align-items: baseline; gap: 8px; padding-top: 4px; }
+  .power-value { font-size: 60px; font-weight: 800; color: #fff; }
+  .power-unit { font-size: 24px; font-weight: 400; color: rgba(255,255,255,0.45); }
+
+  .chart-section { width: 100%; max-width: 540px; }
+  .chart-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1px; padding-bottom: 6px; }
+  .chart-box {
+    background: rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 8px 12px 8px 6px;
+  }
+  .chart-inner { display: flex; width: 100%; }
+  .y-axis {
+    width: 32px; height: 120px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding-right: 4px;
+    flex-shrink: 0;
+  }
+  .y-axis span { font-size: 9px; color: rgba(255,255,255,0.35); text-align: right; display: block; }
+  .chart-area { flex: 1; position: relative; }
+  .chart-area svg { display: block; width: 100%; height: 120px; }
+  .x-labels { display: flex; justify-content: space-between; padding-top: 4px; padding-left: 32px; }
+  .x-labels span { font-size: 10px; color: rgba(255,255,255,0.35); }
+
+  .divider { width: 100%; max-width: 500px; height: 1px; background: rgba(255,255,255,0.12); }
+  .metrics { padding-top: 14px; display: flex; flex-direction: column; gap: 14px; max-width: 500px; }
+  .metric-row { display: flex; justify-content: space-between; align-items: center; }
+  .metric-left { display: flex; align-items: center; gap: 10px; }
+  .metric-icon { width: 24px; height: 24px; border-radius: 50%; opacity: 0.6; display: flex; align-items: center; justify-content: center; font-size: 13px; background: rgba(255,255,255,0.1); }
+  .metric-name { font-size: 20px; font-weight: 500; color: rgba(255,255,255,0.6); }
+  .metric-right { display: flex; align-items: baseline; gap: 6px; }
+  .metric-val { font-size: 24px; font-weight: 700; color: #fafafa; }
+  .metric-unit { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.4); }
+  .updated { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.25); padding-top: 12px; }
+
+  .widget-frame {
+    width: 328px; height: 552px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .widget-screen {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #1B3A4B, #4A90B8);
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+  }
+  .w-header { display: flex; align-items: center; gap: 10px; }
+  .w-header .icon { width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .w-header .title { font-size: 22px; font-weight: 700; color: #fafafa; }
+  .w-power-label { font-size: 12px; font-weight: 600; color: #B0BEC5; letter-spacing: 1px; }
+  .w-power-row { display: flex; align-items: baseline; gap: 6px; padding-top: 4px; }
+  .w-power-value { font-size: 42px; font-weight: 800; color: #fff; }
+  .w-power-unit { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.55); }
+  .w-chart { width: 100%; }
+  .w-chart-inner { display: flex; width: 100%; }
+  .w-y-axis {
+    width: 22px; height: 60px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding-right: 3px;
+    flex-shrink: 0;
+  }
+  .w-y-axis span { font-size: 8px; color: rgba(255,255,255,0.3); text-align: right; display: block; }
+  .w-chart-area { flex: 1; }
+  .w-chart-area svg { display: block; width: 100%; height: 60px; }
+  .w-x-labels { display: flex; justify-content: space-between; padding-top: 2px; padding-left: 22px; }
+  .w-x-labels span { font-size: 8px; color: rgba(255,255,255,0.3); }
+  .w-card { background: rgba(0,0,0,0.18); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .w-metric { display: flex; justify-content: space-between; align-items: center; }
+  .w-metric-left { display: flex; align-items: center; gap: 8px; }
+  .w-metric-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; background: rgba(255,255,255,0.1); }
+  .w-metric-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.65); }
+  .w-metric-val-green { font-size: 15px; font-weight: 700; color: #81C784; }
+  .w-metric-val-blue { font-size: 15px; font-weight: 700; color: #64B5F6; }
+  .w-updated { font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.3); text-align: right; }
+</style>
+</head>
+<body>
+
+<h2>Echo Show 8 / 10 &mdash; Skill Screen</h2>
+<div class="echo-show">
+  <div class="screen">
+    <div class="header">
+      <div class="icon">&#9728;</div>
+      <div class="title">Fotovoltaico</div>
+    </div>
+
+    <div class="power-section">
+      <div class="power-label">POTENZA ATTUALE</div>
+      <div class="power-row">
+        <span class="power-value">2.47</span>
+        <span class="power-unit">kW</span>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-label">CURVA DI PRODUZIONE</div>
+      <div class="chart-box">
+        <div class="chart-inner">
+          <div class="y-axis" id="yAxis"></div>
+          <div class="chart-area">
+            <svg id="skillChart" viewBox="0 0 400 120" preserveAspectRatio="none"></svg>
+          </div>
+        </div>
+        <div class="x-labels" id="xLabels"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="divider"></div>
+      <div class="metrics">
+        <div class="metric-row">
+          <div class="metric-left">
+            <div class="metric-icon">&#9788;</div>
+            <span class="metric-name">Oggi</span>
+          </div>
+          <div class="metric-right">
+            <span class="metric-val">12.8</span>
+            <span class="metric-unit">kWh</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-left">
+            <div class="metric-icon">&#9790;</div>
+            <span class="metric-name">Mese</span>
+          </div>
+          <div class="metric-right">
+            <span class="metric-val">285</span>
+            <span class="metric-unit">kWh</span>
+          </div>
+        </div>
+      </div>
+      <div class="updated">Aggiornato alle 15:30</div>
+    </div>
+  </div>
+</div>
+
+<h2>Echo Hub / Show &mdash; Widget</h2>
+<div class="widget-frame">
+  <div class="widget-screen">
+    <div class="w-header">
+      <div class="icon">&#9728;</div>
+      <div class="title">Fotovoltaico</div>
+    </div>
+
+    <div>
+      <div class="w-power-label">POTENZA ATTUALE</div>
+      <div class="w-power-row">
+        <span class="w-power-value">2.47</span>
+        <span class="w-power-unit">kW</span>
+      </div>
+    </div>
+
+    <div class="w-chart">
+      <div class="w-chart-inner">
+        <div class="w-y-axis" id="wYAxis"></div>
+        <div class="w-chart-area">
+          <svg id="widgetChart" viewBox="0 0 400 120" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+      <div class="w-x-labels" id="wXLabels"></div>
+    </div>
+
+    <div>
+      <div class="w-card">
+        <div class="w-metric">
+          <div class="w-metric-left">
+            <div class="w-metric-icon">&#9788;</div>
+            <span class="w-metric-name">Oggi</span>
+          </div>
+          <span class="w-metric-val-green">12.8 kWh</span>
+        </div>
+        <div class="w-metric">
+          <div class="w-metric-left">
+            <div class="w-metric-icon">&#9790;</div>
+            <span class="w-metric-name">Mese</span>
+          </div>
+          <span class="w-metric-val-blue">285 kWh</span>
+        </div>
+      </div>
+      <div class="w-updated">Agg. 15:30</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CHART_START = 8 * 60;
+const CHART_END = 20 * 60;
+
+function generateRealisticCurve() {
+  const points = [];
+  for (let i = 0; i < 288; i++) {
+    const h = i * 5 / 60;
+    const hh = String(Math.floor(h)).padStart(2, '0');
+    const mm = String((i * 5) % 60).padStart(2, '0');
+    const time = `${hh}:${mm}`;
+
+    let power = 0;
+    if (h >= 7 && h <= 17) {
+      const center = 12.5;
+      const spread = 4.5;
+      const gauss = Math.exp(-0.5 * Math.pow((h - center) / spread, 2));
+      power = 2.7 * gauss;
+      power += (Math.sin(i * 0.7) * 0.08 + Math.sin(i * 1.3) * 0.05);
+      power = Math.max(0, power);
+      if (h >= 13 && h <= 13.2) power *= 0.4;
+      if (h >= 15.4 && h <= 15.6) power *= 0.7;
+    }
+
+    if (h <= 15.5) {
+      points.push({ time, power: Math.round(power * 100) / 100 });
+    }
+  }
+  return points;
+}
+
+function timeToMinutes(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function buildChartPath(points, width, height) {
+  const filtered = points.filter(p => {
+    const m = timeToMinutes(p.time);
+    return m >= CHART_START && m <= CHART_END;
+  });
+
+  const yMax = Math.max(...filtered.map(p => p.power));
+  if (yMax <= 0) return null;
+
+  const yScale = Math.ceil(yMax * 2) / 2;
+  const totalMinutes = CHART_END - CHART_START;
+
+  const coords = filtered.map(p => ({
+    x: Math.round(((timeToMinutes(p.time) - CHART_START) / totalMinutes) * width * 100) / 100,
+    y: Math.round((1 - p.power / yScale) * height * 100) / 100,
+  }));
+
+  const linePath = coords.map((c, i) =>
+    `${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`
+  ).join(' ');
+  const areaPath = `${linePath} L ${coords[coords.length-1].x} ${height} L ${coords[0].x} ${height} Z`;
+
+  const xLabels = [];
+  for (let h = 8; h <= 20; h += 2) {
+    const label = `${String(h).padStart(2, '0')}:00`;
+    const x = Math.round(((h * 60 - CHART_START) / totalMinutes) * width * 100) / 100;
+    xLabels.push({ text: label, x });
+  }
+
+  const yLabels = [];
+  const yStep = yScale <= 2 ? 0.5 : yScale <= 5 ? 1 : 2;
+  for (let v = yScale; v >= 0; v -= yStep) {
+    const y = Math.round((1 - v / yScale) * height * 100) / 100;
+    yLabels.push({ text: String(v), y });
+  }
+
+  return { areaPath, linePath, xLabels, yLabels, yScale, width, height };
+}
+
+const points = generateRealisticCurve();
+const chart = buildChartPath(points, 400, 120);
+
+function renderSvg(svgId, data) {
+  const svg = document.getElementById(svgId);
+
+  const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  area.setAttribute('d', data.areaPath);
+  area.setAttribute('fill', 'rgba(129,199,132,0.25)');
+  svg.appendChild(area);
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  line.setAttribute('d', data.linePath);
+  line.setAttribute('fill', 'none');
+  line.setAttribute('stroke', 'rgba(129,199,132,0.8)');
+  line.setAttribute('stroke-width', '1.5');
+  svg.appendChild(line);
+}
+
+renderSvg('skillChart', chart);
+renderSvg('widgetChart', chart);
+
+const yAxis = document.getElementById('yAxis');
+chart.yLabels.forEach(l => {
+  const span = document.createElement('span');
+  span.textContent = l.text;
+  yAxis.appendChild(span);
+});
+
+const xLabels = document.getElementById('xLabels');
+chart.xLabels.forEach(l => {
+  const span = document.createElement('span');
+  span.textContent = l.text;
+  xLabels.appendChild(span);
+});
+
+const wYAxis = document.getElementById('wYAxis');
+chart.yLabels.forEach(l => {
+  const span = document.createElement('span');
+  span.textContent = l.text;
+  wYAxis.appendChild(span);
+});
+
+const wXLabels = document.getElementById('wXLabels');
+chart.xLabels.forEach(l => {
+  const span = document.createElement('span');
+  span.textContent = l.text;
+  wXLabels.appendChild(span);
+});
+</script>
+</body>
+</html>
