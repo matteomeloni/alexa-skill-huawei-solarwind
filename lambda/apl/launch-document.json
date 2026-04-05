@@ -110,9 +110,9 @@
                     "width": "100%",
                     "backgroundColor": "rgba(0,0,0,0.15)",
                     "borderRadius": "8dp",
-                    "paddingTop": "8dp",
-                    "paddingBottom": "8dp",
-                    "paddingLeft": "6dp",
+                    "paddingTop": "10dp",
+                    "paddingBottom": "10dp",
+                    "paddingLeft": "8dp",
                     "paddingRight": "12dp",
                     "item": {
                       "type": "Container",
@@ -125,15 +125,46 @@
                             {
                               "type": "Container",
                               "width": "30dp",
-                              "height": "120dp",
+                              "height": "140dp",
                               "justifyContent": "spaceBetween",
                               "paddingRight": "4dp",
-                              "data": "${chartData.yLabels}",
                               "items": [
                                 {
                                   "type": "Text",
-                                  "text": "${data.text}",
-                                  "fontSize": "9dp",
+                                  "text": "4",
+                                  "fontSize": "10dp",
+                                  "fontWeight": "400",
+                                  "color": "rgba(255,255,255,0.35)",
+                                  "textAlign": "right"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "3",
+                                  "fontSize": "10dp",
+                                  "fontWeight": "400",
+                                  "color": "rgba(255,255,255,0.35)",
+                                  "textAlign": "right"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "2",
+                                  "fontSize": "10dp",
+                                  "fontWeight": "400",
+                                  "color": "rgba(255,255,255,0.35)",
+                                  "textAlign": "right"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "1",
+                                  "fontSize": "10dp",
+                                  "fontWeight": "400",
+                                  "color": "rgba(255,255,255,0.35)",
+                                  "textAlign": "right"
+                                },
+                                {
+                                  "type": "Text",
+                                  "text": "0",
+                                  "fontSize": "10dp",
                                   "fontWeight": "400",
                                   "color": "rgba(255,255,255,0.35)",
                                   "textAlign": "right"
@@ -143,13 +174,52 @@
                             {
                               "type": "VectorGraphic",
                               "grow": 1,
-                              "height": "120dp",
+                              "height": "140dp",
                               "source": "powerCurveGraphic",
-                              "scale": "best-fit",
+                              "scale": "fill",
                               "parameters": {
                                 "areaPath": "${chartData.areaPath}",
                                 "linePath": "${chartData.linePath}"
                               }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Container",
+                          "direction": "row",
+                          "justifyContent": "spaceBetween",
+                          "paddingLeft": "30dp",
+                          "paddingTop": "4dp",
+                          "items": [
+                            {
+                              "type": "Text",
+                              "text": "08",
+                              "fontSize": "10dp",
+                              "color": "rgba(255,255,255,0.3)"
+                            },
+                            {
+                              "type": "Text",
+                              "text": "11",
+                              "fontSize": "10dp",
+                              "color": "rgba(255,255,255,0.3)"
+                            },
+                            {
+                              "type": "Text",
+                              "text": "14",
+                              "fontSize": "10dp",
+                              "color": "rgba(255,255,255,0.3)"
+                            },
+                            {
+                              "type": "Text",
+                              "text": "17",
+                              "fontSize": "10dp",
+                              "color": "rgba(255,255,255,0.3)"
+                            },
+                            {
+                              "type": "Text",
+                              "text": "20",
+                              "fontSize": "10dp",
+                              "color": "rgba(255,255,255,0.3)"
                             }
                           ]
                         }
@@ -311,15 +381,47 @@
       "items": [
         {
           "type": "path",
+          "pathData": "M 0 0 L 400 0",
+          "fill": "none",
+          "stroke": "rgba(255,255,255,0.08)",
+          "strokeWidth": 0.5,
+          "strokeDashArray": [4, 4]
+        },
+        {
+          "type": "path",
+          "pathData": "M 0 30 L 400 30",
+          "fill": "none",
+          "stroke": "rgba(255,255,255,0.08)",
+          "strokeWidth": 0.5,
+          "strokeDashArray": [4, 4]
+        },
+        {
+          "type": "path",
+          "pathData": "M 0 60 L 400 60",
+          "fill": "none",
+          "stroke": "rgba(255,255,255,0.08)",
+          "strokeWidth": 0.5,
+          "strokeDashArray": [4, 4]
+        },
+        {
+          "type": "path",
+          "pathData": "M 0 90 L 400 90",
+          "fill": "none",
+          "stroke": "rgba(255,255,255,0.08)",
+          "strokeWidth": 0.5,
+          "strokeDashArray": [4, 4]
+        },
+        {
+          "type": "path",
           "pathData": "${areaPath}",
-          "fill": "rgba(129,199,132,0.25)",
+          "fill": "rgba(255,255,255,0.12)",
           "stroke": "none"
         },
         {
           "type": "path",
           "pathData": "${linePath}",
           "fill": "none",
-          "stroke": "rgba(129,199,132,0.8)",
+          "stroke": "rgba(255,255,255,0.6)",
           "strokeWidth": 1.5
         }
       ]
