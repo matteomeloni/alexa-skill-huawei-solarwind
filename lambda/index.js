@@ -3,7 +3,13 @@ const { fetchSolarData, updateWidgetDataStore } = require('./util');
 
 const { LaunchRequestHandler, PotenzaAttualeIntentHandler, ProduzioneOggiIntentHandler } = require('./handlers/solar');
 const { UsagesInstalledHandler, UpdateRequestHandler, UsagesRemovedHandler } = require('./handlers/widget');
-const { HelpIntentHandler, CancelAndStopIntentHandler, FallbackIntentHandler, SessionEndedRequestHandler, ErrorHandler } = require('./handlers/builtin');
+const {
+  HelpIntentHandler,
+  CancelAndStopIntentHandler,
+  FallbackIntentHandler,
+  SessionEndedRequestHandler,
+  ErrorHandler,
+} = require('./handlers/builtin');
 
 const alexaHandler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
@@ -16,7 +22,7 @@ const alexaHandler = Alexa.SkillBuilders.custom()
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
-    SessionEndedRequestHandler
+    SessionEndedRequestHandler,
   )
   .addErrorHandlers(ErrorHandler)
   .lambda();

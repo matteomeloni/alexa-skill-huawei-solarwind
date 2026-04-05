@@ -9,10 +9,7 @@ const HelpIntentHandler = {
     );
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
-      .speak(msg.HELP)
-      .reprompt(msg.HELP_REPROMPT)
-      .getResponse();
+    return handlerInput.responseBuilder.speak(msg.HELP).reprompt(msg.HELP_REPROMPT).getResponse();
   },
 };
 
@@ -25,10 +22,7 @@ const CancelAndStopIntentHandler = {
     );
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
-      .speak(msg.GOODBYE)
-      .withShouldEndSession(true)
-      .getResponse();
+    return handlerInput.responseBuilder.speak(msg.GOODBYE).withShouldEndSession(true).getResponse();
   },
 };
 
@@ -40,10 +34,7 @@ const FallbackIntentHandler = {
     );
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
-      .speak(msg.FALLBACK)
-      .reprompt(msg.FALLBACK_REPROMPT)
-      .getResponse();
+    return handlerInput.responseBuilder.speak(msg.FALLBACK).reprompt(msg.FALLBACK_REPROMPT).getResponse();
   },
 };
 
@@ -64,9 +55,7 @@ const ErrorHandler = {
   },
   handle(handlerInput, error) {
     console.error('Unhandled error:', error.message);
-    return handlerInput.responseBuilder
-      .speak(msg.ERROR_GENERIC)
-      .getResponse();
+    return handlerInput.responseBuilder.speak(msg.ERROR_GENERIC).getResponse();
   },
 };
 

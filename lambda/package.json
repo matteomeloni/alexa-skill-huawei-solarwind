@@ -4,11 +4,16 @@
   "description": "Alexa Skill per monitoraggio impianto fotovoltaico Huawei FusionSolar",
   "main": "index.js",
   "scripts": {
-    "test": "node --test __tests__/*.test.js"
+    "test": "node --test __tests__/*.test.js",
+    "format": "prettier --write '**/*.js'",
+    "format:check": "prettier --check '**/*.js'"
   },
   "dependencies": {
     "ask-sdk-core": "^2.14.0",
     "ask-sdk-model": "^1.86.0",
     "axios": "^1.7.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
   }
 }

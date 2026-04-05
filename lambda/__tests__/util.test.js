@@ -194,9 +194,9 @@ describe('buildChartPath', () => {
     }
     const result = buildChartPath(points, 400, 120);
     assert.ok(result.xLabels.length > 0);
-    assert.ok(result.xLabels.some(l => l.text === '08:00'));
-    assert.ok(result.xLabels.some(l => l.text === '12:00'));
-    assert.ok(result.xLabels.some(l => l.text === '20:00'));
+    assert.ok(result.xLabels.some((l) => l.text === '08:00'));
+    assert.ok(result.xLabels.some((l) => l.text === '12:00'));
+    assert.ok(result.xLabels.some((l) => l.text === '20:00'));
   });
 
   it('generates yLabels for the vertical axis', () => {

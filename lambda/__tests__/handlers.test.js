@@ -30,11 +30,25 @@ function createMockHandlerInput(requestType, intentName, opts = {}) {
       },
     },
     responseBuilder: {
-      speak(text) { responses.push({ speak: text }); return this; },
-      reprompt(text) { responses.push({ reprompt: text }); return this; },
-      withShouldEndSession(val) { responses.push({ endSession: val }); return this; },
-      addDirective(d) { responses.push({ directive: d }); return this; },
-      getResponse() { return { responses }; },
+      speak(text) {
+        responses.push({ speak: text });
+        return this;
+      },
+      reprompt(text) {
+        responses.push({ reprompt: text });
+        return this;
+      },
+      withShouldEndSession(val) {
+        responses.push({ endSession: val });
+        return this;
+      },
+      addDirective(d) {
+        responses.push({ directive: d });
+        return this;
+      },
+      getResponse() {
+        return { responses };
+      },
     },
     _responses: responses,
   };
@@ -72,10 +86,7 @@ describe('handler: exports.handler routing', () => {
 
     const { handler } = require('../index');
 
-    const result = await handler(
-      { source: 'aws.events', 'detail-type': 'Scheduled Event' },
-      {}
-    );
+    const result = await handler({ source: 'aws.events', 'detail-type': 'Scheduled Event' }, {});
     assert.equal(result.statusCode, 200);
 
     delete process.env.ALEXA_USER_ID;
@@ -88,10 +99,7 @@ describe('handler: exports.handler routing', () => {
     delete process.env.ALEXA_USER_ID;
 
     const { handler } = require('../index');
-    const result = await handler(
-      { source: 'aws.events', 'detail-type': 'Scheduled Event' },
-      {}
-    );
+    const result = await handler({ source: 'aws.events', 'detail-type': 'Scheduled Event' }, {});
     assert.equal(result.statusCode, 400);
   });
 });
@@ -100,11 +108,22 @@ describe('messages integration', () => {
   it('messages module exports all required keys', () => {
     const msg = require('../messages');
     const requiredKeys = [
-      'WELCOME_PRODUCING', 'WELCOME_NOT_PRODUCING', 'WELCOME_FALLBACK',
-      'REPROMPT_DEFAULT', 'POWER_PRODUCING', 'POWER_NOT_PRODUCING',
-      'REPROMPT_MORE', 'DAILY_ENERGY', 'HELP', 'HELP_REPROMPT',
-      'GOODBYE', 'FALLBACK', 'FALLBACK_REPROMPT', 'ERROR_FETCH',
-      'ERROR_RETRY_REPROMPT', 'ERROR_GENERIC',
+      'WELCOME_PRODUCING',
+      'WELCOME_NOT_PRODUCING',
+      'WELCOME_FALLBACK',
+      'REPROMPT_DEFAULT',
+      'POWER_PRODUCING',
+      'POWER_NOT_PRODUCING',
+      'REPROMPT_MORE',
+      'DAILY_ENERGY',
+      'HELP',
+      'HELP_REPROMPT',
+      'GOODBYE',
+      'FALLBACK',
+      'FALLBACK_REPROMPT',
+      'ERROR_FETCH',
+      'ERROR_RETRY_REPROMPT',
+      'ERROR_GENERIC',
     ];
     for (const key of requiredKeys) {
       assert.ok(msg[key] !== undefined, `Missing message key: ${key}`);
