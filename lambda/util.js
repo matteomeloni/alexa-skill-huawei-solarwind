@@ -125,7 +125,7 @@ function buildChartPath(points, width, height) {
   const yMax = Math.max(...filtered.map(p => p.power));
   if (yMax <= 0) return null;
 
-  const yScale = Math.ceil(yMax * 2) / 2;
+  const yScale = 4;
   const totalMinutes = CHART_END - CHART_START;
 
   const coords = filtered.map(p => ({
@@ -154,6 +154,7 @@ function buildChartPath(points, width, height) {
     const y = Math.round((1 - v / yScale) * height * 100) / 100;
     yLabels.push({ text: String(v), y });
   }
+  const yAxisText = yLabels.map(l => l.text).join('<br/>');
 
   let peakPower = 0;
   let peakTime = '';
@@ -164,7 +165,7 @@ function buildChartPath(points, width, height) {
     }
   }
 
-  return { areaPath, linePath, xLabels, yLabels, yScale, peakPower, peakTime, width, height };
+  return { areaPath, linePath, xLabels, yLabels, yAxisText, yScale, peakPower, peakTime, width, height };
 }
 
 async function fetchSolarData() {
@@ -225,6 +226,7 @@ async function updateWidgetDataStore(userId, solarData, _retried = false) {
             linePath: solarData.chartData.linePath,
             xLabels: solarData.chartData.xLabels,
             yLabels: solarData.chartData.yLabels,
+            yAxisText: solarData.chartData.yAxisText,
           } : null,
         },
       },

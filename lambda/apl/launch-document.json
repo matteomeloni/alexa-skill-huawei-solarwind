@@ -145,8 +145,11 @@
                               "grow": 1,
                               "height": "120dp",
                               "source": "powerCurveGraphic",
-                              "areaPath": "${chartData.areaPath}",
-                              "linePath": "${chartData.linePath}"
+                              "scale": "best-fit",
+                              "parameters": {
+                                "areaPath": "${chartData.areaPath}",
+                                "linePath": "${chartData.linePath}"
+                              }
                             }
                           ]
                         }

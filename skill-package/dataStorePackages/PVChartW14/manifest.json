@@ -27,7 +27,7 @@
     }
   },
   "manifest": {
-    "id": "PVChartWidget",
+    "id": "PVChartW14",
     "version": "1.0.0",
     "installStateChanges": "INFORM",
     "updateStateChanges": "AUTOMATIC",
