@@ -1,0 +1,8 @@
+{
+  "solarDefaults": {
+    "realTimePower": "--",
+    "dailyEnergy": "--",
+    "monthEnergy": "--",
+    "lastUpdated": "In attesa..."
+  }
+}

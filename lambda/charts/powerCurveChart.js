@@ -28,9 +28,11 @@ function buildChartPath(points, width, height) {
 
   if (coords.length === 0) return null;
 
-  const linePath = coords.map((c, i) => `${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`).join(' ');
+  const curvePath = coords.map((c, i) => `${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`).join(' ');
 
-  const areaPath = `${linePath} L ${coords[coords.length - 1].x} ${height} L ${coords[0].x} ${height} Z`;
+  const linePath = `M 0 ${height} ${curvePath} M ${width} ${height}`;
+
+  const areaPath = `M 0 ${height} ${curvePath} L ${coords[coords.length - 1].x} ${height} L 0 ${height} Z`;
 
   const xLabels = [];
   for (let h = 8; h <= 20; h += 2) {

@@ -27,7 +27,7 @@
     }
   },
   "manifest": {
-    "id": "PVChartW14",
+    "id": "PVChartW18",
     "version": "1.0.0",
     "installStateChanges": "INFORM",
     "updateStateChanges": "AUTOMATIC",

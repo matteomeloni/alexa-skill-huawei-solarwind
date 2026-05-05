@@ -1,0 +1,41 @@
+{
+  "packageVersion": "1.0",
+  "packageType": "APL_PACKAGE",
+  "publishingInformation": {
+    "schemaVersion": "1.0",
+    "locales": {
+      "it-IT": [
+        {
+          "targetViewport": "WIDGET_M",
+          "metadata": {
+            "name": "FV Compatto",
+            "description": "Widget compatto per monitorare la produzione fotovoltaica: potenza attuale, produzione giornaliera e mensile",
+            "keywords": [
+              "fotovoltaico",
+              "solare",
+              "energia",
+              "compatto",
+              "produzione"
+            ],
+            "iconUri": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/widget-icon-450.png",
+            "previews": [
+              "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/widget-preview-328x552.png"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "id": "PVMini",
+    "version": "1.0.0",
+    "installStateChanges": "INFORM",
+    "updateStateChanges": "AUTOMATIC",
+    "appliesTo": "${viewport.mode == 'HUB'}",
+    "presentationDefinitions": [
+      {
+        "url": "presentations/default.tpl"
+      }
+    ]
+  }
+}

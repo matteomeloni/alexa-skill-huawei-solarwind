@@ -381,6 +381,12 @@
       "items": [
         {
           "type": "path",
+          "pathData": "M 0 0 L 400 0 L 400 120 L 0 120 Z",
+          "fill": "transparent",
+          "stroke": "none"
+        },
+        {
+          "type": "path",
           "pathData": "M 0 0 L 400 0",
           "fill": "none",
           "stroke": "rgba(255,255,255,0.08)",

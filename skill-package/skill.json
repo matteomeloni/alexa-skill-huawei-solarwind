@@ -34,7 +34,10 @@
             "type": "ALEXA_DATASTORE_PACKAGEMANAGER",
             "packages": [
               {
-                "id": "PVChartW14"
+                "id": "PVChartW18"
+              },
+              {
+                "id": "PVMini"
               }
             ]
           },

@@ -1,0 +1,245 @@
+{
+  "type": "APL",
+  "version": "2024.3",
+  "extensions": [
+    {
+      "name": "DataStore",
+      "uri": "alexaext:datastore:10"
+    }
+  ],
+  "settings": {
+    "DataStore": {
+      "dataBindings": [
+        {
+          "namespace": "fotovoltaico",
+          "key": "realtime",
+          "dataBindingName": "solarData",
+          "dataType": "object"
+        }
+      ]
+    }
+  },
+  "mainTemplate": {
+    "parameters": [
+      "solarDefaults"
+    ],
+    "items": {
+      "type": "Container",
+      "width": "100vw",
+      "height": "100vh",
+      "items": [
+        {
+          "type": "Frame",
+          "width": "100vw",
+          "height": "100vh",
+          "borderRadius": "4dp",
+          "background": {
+            "type": "linear",
+            "colorRange": ["#25485E", "#5D9FD3"],
+            "inputRange": [0, 1],
+            "angle": 160
+          },
+          "item": {
+            "type": "Container",
+            "width": "100%",
+            "height": "100%",
+            "paddingTop": "16dp",
+            "paddingBottom": "12dp",
+            "paddingLeft": "16dp",
+            "paddingRight": "16dp",
+            "justifyContent": "spaceBetween",
+            "items": [
+              {
+                "type": "Container",
+                "direction": "row",
+                "alignItems": "center",
+                "spacing": "6dp",
+                "items": [
+                  {
+                    "type": "Image",
+                    "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-power.png",
+                    "width": "18dp",
+                    "height": "18dp",
+                    "opacity": 0.6
+                  },
+                  {
+                    "type": "Text",
+                    "text": "Fotovoltaico",
+                    "fontSize": "16dp",
+                    "fontWeight": "700",
+                    "color": "#FAFAFA"
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "grow": 1,
+                "justifyContent": "center",
+                "alignItems": "center",
+                "items": [
+                  {
+                    "type": "Text",
+                    "text": "POTENZA ATTUALE",
+                    "fontSize": "9dp",
+                    "fontWeight": "600",
+                    "color": "rgba(255,255,255,0.45)",
+                    "letterSpacing": "1dp"
+                  },
+                  {
+                    "type": "Container",
+                    "direction": "row",
+                    "alignItems": "baseline",
+                    "spacing": "4dp",
+                    "paddingTop": "4dp",
+                    "items": [
+                      {
+                        "type": "Text",
+                        "text": "${solarData.realTimePower ? solarData.realTimePower : solarDefaults.realTimePower}",
+                        "fontSize": "48dp",
+                        "fontWeight": "800",
+                        "color": "#FFFFFF"
+                      },
+                      {
+                        "type": "Text",
+                        "text": "kW",
+                        "fontSize": "16dp",
+                        "fontWeight": "400",
+                        "color": "rgba(255,255,255,0.45)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Frame",
+                "width": "100%",
+                "height": "1dp",
+                "backgroundColor": "rgba(255,255,255,0.12)"
+              },
+              {
+                "type": "Container",
+                "paddingTop": "8dp",
+                "spacing": "6dp",
+                "items": [
+                  {
+                    "type": "Container",
+                    "direction": "row",
+                    "alignItems": "center",
+                    "justifyContent": "spaceBetween",
+                    "items": [
+                      {
+                        "type": "Container",
+                        "direction": "row",
+                        "alignItems": "center",
+                        "spacing": "6dp",
+                        "items": [
+                          {
+                            "type": "Image",
+                            "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-today.png",
+                            "width": "14dp",
+                            "height": "14dp",
+                            "opacity": 0.6
+                          },
+                          {
+                            "type": "Text",
+                            "text": "Oggi",
+                            "fontSize": "12dp",
+                            "fontWeight": "500",
+                            "color": "rgba(255,255,255,0.6)"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Container",
+                        "direction": "row",
+                        "alignItems": "baseline",
+                        "spacing": "3dp",
+                        "items": [
+                          {
+                            "type": "Text",
+                            "text": "${solarData.dailyEnergy ? solarData.dailyEnergy : solarDefaults.dailyEnergy}",
+                            "fontSize": "14dp",
+                            "fontWeight": "700",
+                            "color": "#FAFAFA"
+                          },
+                          {
+                            "type": "Text",
+                            "text": "kWh",
+                            "fontSize": "9dp",
+                            "fontWeight": "400",
+                            "color": "rgba(255,255,255,0.4)"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Container",
+                    "direction": "row",
+                    "alignItems": "center",
+                    "justifyContent": "spaceBetween",
+                    "items": [
+                      {
+                        "type": "Container",
+                        "direction": "row",
+                        "alignItems": "center",
+                        "spacing": "6dp",
+                        "items": [
+                          {
+                            "type": "Image",
+                            "source": "https://alexa-fv-assets-126437.s3.eu-west-1.amazonaws.com/icons/icon-month.png",
+                            "width": "14dp",
+                            "height": "14dp",
+                            "opacity": 0.6
+                          },
+                          {
+                            "type": "Text",
+                            "text": "Mese",
+                            "fontSize": "12dp",
+                            "fontWeight": "500",
+                            "color": "rgba(255,255,255,0.6)"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Container",
+                        "direction": "row",
+                        "alignItems": "baseline",
+                        "spacing": "3dp",
+                        "items": [
+                          {
+                            "type": "Text",
+                            "text": "${solarData.monthEnergy ? solarData.monthEnergy : solarDefaults.monthEnergy}",
+                            "fontSize": "14dp",
+                            "fontWeight": "700",
+                            "color": "#FAFAFA"
+                          },
+                          {
+                            "type": "Text",
+                            "text": "kWh",
+                            "fontSize": "9dp",
+                            "fontWeight": "400",
+                            "color": "rgba(255,255,255,0.4)"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Text",
+                "text": "Agg. ${solarData.lastUpdated ? solarData.lastUpdated : solarDefaults.lastUpdated}",
+                "fontSize": "8dp",
+                "fontWeight": "400",
+                "color": "rgba(255,255,255,0.3)",
+                "textAlign": "right",
+                "paddingTop": "4dp"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

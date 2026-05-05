@@ -23,6 +23,7 @@ describe('services/fusionsolar/payload', () => {
     const result = extractPowerCurve(raw);
     assert.equal(result.length, 1);
     assert.equal(result[0].power, 1.5);
+    assert.equal(result[0].time, '08:00');
   });
 });
 

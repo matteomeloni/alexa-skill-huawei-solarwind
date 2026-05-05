@@ -157,9 +157,11 @@
                       {
                         "type": "VectorGraphic",
                         "grow": 1,
-                        "height": "170dp",
+                        "width": "200",
+                        "height": "200",
                         "source": "miniCurveGraphic",
                         "scale": "fill",
+                        "align": "top",
                         "parameters": {
                           "areaPath": "${solarData.chartData.areaPath}",
                           "linePath": "${solarData.chartData.linePath}"
@@ -342,6 +344,12 @@
       "width": 400,
       "height": 120,
       "items": [
+        {
+          "type": "path",
+          "pathData": "M 0 0 L 400 0 L 400 120 L 0 120 Z",
+          "fill": "transparent",
+          "stroke": "none"
+        },
         {
           "type": "path",
           "pathData": "M 0 0 L 400 0",
